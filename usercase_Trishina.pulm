@@ -1,0 +1,35 @@
+@startuml
+actor Клиент as client
+actor Инкассатор as collector
+actor БанковскаяСистема as bankSystem
+
+rectangle "Банкомат" {
+  usecase "Ввод карты и PIN" as Auth
+  usecase "Проверка баланса" as Balance
+  usecase "Снятие наличных" as Withdraw
+  usecase "Пополнение счёта" as Deposit
+  usecase "Печать чека" as PrintReceipt
+  usecase "Загрузка наличных" as LoadCash
+  usecase "Сбор выручки" as CollectCash
+}
+
+client --> Auth
+client --> Balance
+client --> Withdraw
+client --> Deposit
+client --> PrintReceipt
+
+collector --> LoadCash
+collector --> CollectCash
+
+bankSystem --> Auth
+bankSystem --> Withdraw
+bankSystem --> Deposit
+
+Withdraw ..> Auth : <<include>>
+Deposit ..> Auth : <<include>>
+Balance ..> Auth : <<include>>
+
+PrintReceipt <|.. Withdraw : <<extend>>
+PrintReceipt <|.. Deposit : <<extend>>
+@enduml
